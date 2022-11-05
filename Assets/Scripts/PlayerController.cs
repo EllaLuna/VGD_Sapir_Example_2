@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float speed = 5f;
     [SerializeField] float defaultSpeed = 5f;
     Vector2 delta = new Vector2(0, 0);
+    [SerializeField] GameObject arrow;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2d.velocity = Vector2.zero;
             animator.SetTrigger("Attack");
+            Instantiate(arrow, transform.position, Quaternion.identity);
             speed = 0f;
         }
 
