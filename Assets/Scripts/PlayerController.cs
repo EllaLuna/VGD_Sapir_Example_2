@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,22 @@ public class PlayerController : MonoBehaviour
 
     Animator animator;
     Rigidbody2D rigidbody2d;
-    [SerializeField] float speed = 5f;
+    float speed;
     [SerializeField] float defaultSpeed = 5f;
+    Vector2 direction = new Vector2(0, 0);
     Vector2 delta = new Vector2(0, 0);
-    [SerializeField] GameObject arrow;
+    [SerializeField] GameObject projectile;
+    bool canAttack = true;
+    [SerializeField] Transform firePoint;
+    [SerializeField] Transform frontFirePoint;
+    Transform chosenFirePoint;
+    public static event Action<Vector3> Shoot;
 
     // Start is called before the first frame update
     void Start()
     {
+        speed = defaultSpeed;
+        chosenFirePoint = frontFirePoint;
         animator = GetComponent<Animator>();
         rigidbody2d = GetComponent<Rigidbody2D>();
         if (rigidbody2d is null)
@@ -26,14 +35,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canAttack)
         {
-            rigidbody2d.velocity = Vector2.zero;
-            animator.SetTrigger("Attack");
-            Instantiate(arrow, transform.position, Quaternion.identity);
+            canAttack = false;
             speed = 0f;
+            animator.SetTrigger("Attack");
+            StartCoroutine(WaitForAnimation(0.5f));
+            if (!Mathf.Approximately(delta.x, 0.0f))
+            {
+                transform.localScale = new Vector3(Mathf.Sign(delta.x), 1.0f, 1.0f);
+            }
+            Instantiate(projectile, chosenFirePoint.position, Quaternion.identity);
+            Shoot?.Invoke(direction);
         }
+    }
 
+    IEnumerator WaitForAnimation(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        speed = defaultSpeed;
+        canAttack = true;
     }
 
     private void FixedUpdate()
@@ -41,19 +62,28 @@ public class PlayerController : MonoBehaviour
         delta = new Vector2(Input.GetAxis("Horizontal") * speed, Input.GetAxis("Vertical") * speed);
         if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
         {
-            rigidbody2d.velocity = new Vector2(delta.x, 0);
+            direction = new Vector2(delta.x, 0);
+            rigidbody2d.velocity = direction;
             animator.SetBool("Walking", true);
             animator.SetFloat("PosX", delta.x);
             animator.SetFloat("PosY", 0);
+            if (!Mathf.Approximately(delta.x, 0.0f))
+            {
+                transform.localScale = new Vector3(Mathf.Sign(delta.x), 1.0f, 1.0f);
+            }
+            chosenFirePoint = firePoint;
         }
         else
         {
             if (Mathf.Abs(delta.y) > Mathf.Abs(delta.x))
             {
-                rigidbody2d.velocity = new Vector2(0, delta.y);
+                direction = new Vector2(0, delta.y);
+                rigidbody2d.velocity = direction;
                 animator.SetBool("Walking", true);
                 animator.SetFloat("PosX", 0);
                 animator.SetFloat("PosY", delta.y);
+                frontFirePoint.localPosition = new Vector3(0, delta.y > 0 ? 0.5f : -1, 0);
+                chosenFirePoint = frontFirePoint;
             }
             else
             {
@@ -63,14 +93,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ReturnDefaultSpeed()
-    {
-        speed = 5f;
-        Debug.Log(speed);
-    }
-   private void SetSpeed()
-    {
-        speed = 5f;
-        Debug.Log(speed);
-    }
 }

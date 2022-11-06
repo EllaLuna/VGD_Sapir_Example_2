@@ -13,12 +13,17 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] Tilemap tilemap;
     bool coroutineStarted = false;
 
+    private void Start()
+    {
+        StartCoroutine(SpawnEnemies());
+    }
     void Update()
     {
-        if (enemiesInMap < numberOfEnemies && !coroutineStarted)
-        {
-            StartCoroutine(SpawnEnemies());
-        }
+        //if we want the number of enemiesInMap to be numberOfEnemies at all times (need to update destory of enemy)
+        //if (enemiesInMap < numberOfEnemies && !coroutineStarted)
+        //{
+        //    StartCoroutine(SpawnEnemies());
+        //}
     }
 
     private IEnumerator SpawnEnemies()

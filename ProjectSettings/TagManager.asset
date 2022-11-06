@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CollisionChecker
   - Enemy
+  - Arrow
   layers:
   - Default
   - TransparentFX
