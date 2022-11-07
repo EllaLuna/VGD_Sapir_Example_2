@@ -20,6 +20,7 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         //if we want the number of enemiesInMap to be numberOfEnemies at all times (need to update destory of enemy)
+        //and delete from Start
         //if (enemiesInMap < numberOfEnemies && !coroutineStarted)
         //{
         //    StartCoroutine(SpawnEnemies());

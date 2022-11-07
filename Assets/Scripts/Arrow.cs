@@ -14,12 +14,6 @@ public class Arrow : MonoBehaviour
         PlayerController.Shoot += ArrowDirection;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-
-    }
-
     public void ArrowDirection(Vector3 direction)
     {
         if (directionSet) return;

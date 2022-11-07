@@ -25,14 +25,17 @@ public class PlayerController : MonoBehaviour
         speed = defaultSpeed;
         chosenFirePoint = frontFirePoint;
         animator = GetComponent<Animator>();
+        if (animator is null)
+        {
+            Debug.LogError("Animator is null, please assign it");
+        }
         rigidbody2d = GetComponent<Rigidbody2D>();
         if (rigidbody2d is null)
         {
-            Debug.Log("Rigidbody is null");
+            Debug.LogError("Rigidbody is null, please assign it");
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && canAttack)
