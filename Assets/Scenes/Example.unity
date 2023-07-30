@@ -3676,7 +3676,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380195601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -149251,6 +149251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1772566079}
   - component: {fileID: 1772566078}
+  - component: {fileID: 1772566080}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -149291,6 +149292,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1772566080
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772566077}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2425382cdac187a4fb83aa537ab3b592, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1785643425
 GameObject:
   m_ObjectHideFlags: 0
@@ -150083,7 +150104,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2069812009
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -150100,7 +150121,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &2069812011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150115,7 +150136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultSpeed: 5
   projectile: {fileID: 7030757154491381172, guid: 88645ab6bed7c2a43b84b9f124140d3f, type: 3}
-  firePoint: {fileID: 2035114812}
+  sideFirePoint: {fileID: 2035114812}
   frontFirePoint: {fileID: 380195602}
 --- !u!70 &2069812012
 CapsuleCollider2D:

@@ -6,38 +6,34 @@ using UnityEngine.Tilemaps;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] bool keepSpawningEnemies;
     [SerializeField] GameObject enemy;
     [SerializeField] CollisionChecker collisionChecker;
     [SerializeField] int numberOfEnemies = 5;
     [SerializeField] int enemiesInMap = 0;
     [SerializeField] Tilemap tilemap;
-    bool coroutineStarted = false;
+    Coroutine spawnEnemies;
 
     private void Start()
     {
-        StartCoroutine(SpawnEnemies());
+        spawnEnemies = StartCoroutine(SpawnEnemies());
     }
     void Update()
     {
-        //if we want the number of enemiesInMap to be numberOfEnemies at all times (need to update destory of enemy)
-        //and delete from Start
-        //if (enemiesInMap < numberOfEnemies && !coroutineStarted)
-        //{
-        //    StartCoroutine(SpawnEnemies());
-        //}
+        if (enemiesInMap < numberOfEnemies && spawnEnemies == null 
+            && keepSpawningEnemies)
+        {
+            spawnEnemies = StartCoroutine(SpawnEnemies());
+        }
     }
 
     private IEnumerator SpawnEnemies()
     {
-        coroutineStarted = true;
         var boundsMin = new Vector2(tilemap.cellBounds.xMin + 5f, tilemap.cellBounds.yMin + 5f);
         var boundsMax = new Vector2(tilemap.cellBounds.xMax - 5f, tilemap.cellBounds.yMax - 5f);
         do
         {
-            var spawnPlace = new Vector3(Random.Range(boundsMin.x, boundsMax.x), Random.Range(boundsMin.y, boundsMax.y), 0);
-
-            collisionChecker.transform.position = spawnPlace;
-            collisionChecker.gameObject.SetActive(true);
+            Vector3 spawnPlace = PlaceCollisionChecker(boundsMin, boundsMax);
             yield return new WaitForSeconds(0.2f);
 
             if (collisionChecker.collisionDetected)
@@ -53,7 +49,15 @@ public class EnemySpawner : MonoBehaviour
             }
         }
         while (enemiesInMap < numberOfEnemies);
-        coroutineStarted = false;
+        spawnEnemies = null;
+    }
+
+    private Vector3 PlaceCollisionChecker(Vector2 boundsMin, Vector2 boundsMax)
+    {
+        var spawnPlace = new Vector3(Random.Range(boundsMin.x, boundsMax.x),
+                        Random.Range(boundsMin.y, boundsMax.y), 0);
+        collisionChecker.transform.position = spawnPlace;
+        collisionChecker.gameObject.SetActive(true);
+        return spawnPlace;
     }
 }
-
