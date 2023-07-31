@@ -149271,6 +149271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cc6eae90aa6574ca07ec1fbb2ee074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepSpawningEnemies: 0
   enemy: {fileID: 8315002589702500699, guid: 3ee655eb61845ed42ba025986260044d, type: 3}
   collisionChecker: {fileID: 227863594}
   numberOfEnemies: 20
@@ -150134,7 +150135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf019ec3564e860478c51c8d57ce1f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSpeed: 5
+  defaultSpeed: 156
   projectile: {fileID: 7030757154491381172, guid: 88645ab6bed7c2a43b84b9f124140d3f, type: 3}
   sideFirePoint: {fileID: 2035114812}
   frontFirePoint: {fileID: 380195602}
