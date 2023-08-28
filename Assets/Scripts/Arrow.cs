@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,26 @@ public class Arrow : MonoBehaviour
 {
     Rigidbody2D rigidbody2d;
     [SerializeField] float speed = 5f;
+    int z;
+    [SerializeField] ShootingChannel shootingChannel;
 
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
-        PlayerController.Shoot += ArrowDirection;
+        var beacon = FindObjectOfType<BeaconSO>();
+        shootingChannel = beacon.shootingChannel;
+        shootingChannel.Shoot += ArrowDirection;
+    }
+
+    private int ReturnZPosition(string arg)
+    {
+        Debug.Log($"{arg}: {z}");
+        return z;
     }
 
     public void ArrowDirection(Vector3 direction)
     {
-        var z = direction switch
+        z = direction switch
         {
             _ when direction.y > 0 => 0,
             _ when direction.y < 0 => 180,
@@ -51,7 +62,7 @@ public class Arrow : MonoBehaviour
     public void Shoot()
     {
         rigidbody2d.AddForce(transform.up * speed, ForceMode2D.Impulse);
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 3f);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -65,6 +76,6 @@ public class Arrow : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerController.Shoot -= ArrowDirection;
+        shootingChannel.Shoot -= ArrowDirection;
     }
 }

@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
+    public string id = Guid.NewGuid().ToString();
     Animator animator;
     [Header("Movement")]
-    [SerializeField] float defaultSpeed = 5f;
+    [SerializeField] float defaultSpeed;
     float speed;
     Rigidbody2D rigidbody2d;
     Vector2 direction = new Vector2(0, 0);
@@ -18,10 +21,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform frontFirePoint;
     bool canAttack = true;
     Transform chosenFirePoint;
-    public static event Action<Vector3> Shoot;
+    [SerializeField] ShootingChannel shootingChannel;
 
     void Start()
     {
+        var beacon = FindObjectOfType<BeaconSO>();
+        shootingChannel = beacon.shootingChannel;
         speed = defaultSpeed;
         direction = Vector2.down;
         chosenFirePoint = frontFirePoint;
@@ -78,7 +83,7 @@ public class PlayerController : MonoBehaviour
     public void HandleShoot()
     {
         Instantiate(projectile, chosenFirePoint.position, Quaternion.identity);
-        Shoot?.Invoke(direction);
+        shootingChannel.Shoot?.Invoke(direction);
     }
 
     private void FlipSprite()
