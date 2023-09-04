@@ -20,7 +20,6 @@ public class Arrow : MonoBehaviour
 
     private int ReturnZPosition(string arg)
     {
-        Debug.Log($"{arg}: {z}");
         return z;
     }
 

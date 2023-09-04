@@ -22,11 +22,17 @@ public class PlayerController : MonoBehaviour
     bool canAttack = true;
     Transform chosenFirePoint;
     [SerializeField] ShootingChannel shootingChannel;
+    InputChannel inputChannel;
+    bool shootingPressed = false;
 
     void Start()
     {
-        var beacon = FindObjectOfType<BeaconSO>();
-        shootingChannel = beacon.shootingChannel;
+        AddListeners();
+        AssignDefaults();
+    }
+    #region Assigns
+    private void AssignDefaults()
+    {
         speed = defaultSpeed;
         direction = Vector2.down;
         chosenFirePoint = frontFirePoint;
@@ -42,11 +48,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void AddListeners()
+    {
+        var beacon = FindObjectOfType<BeaconSO>();
+        shootingChannel = beacon.shootingChannel;
+        inputChannel = beacon.inputChannel;
+        inputChannel.MoveEvent += HandleMovement;
+        inputChannel.ShootEvent += HandleShooting;
+        inputChannel.ShootCancelledEvent += HandleShootingCancelled;
+    }
+    #endregion
+
+    #region HandleInputEvents
+    private void HandleMovement(Vector2 dir)
+    {
+        delta = dir * speed;
+    }
+    private void HandleShooting()
+    {
+        shootingPressed = true;
+    }
+    private void HandleShootingCancelled()
+    {
+        shootingPressed = false;
+    }
+    #endregion
+
     void Update()
     {
-        delta = new Vector2(Input.GetAxis("Horizontal") * speed, Input.GetAxis("Vertical") * speed);
-        if (Input.GetKeyDown(KeyCode.Space) && canAttack)
+        if (shootingPressed && canAttack)
         {
+            shootingPressed = false;
             canAttack = false;
             speed = 0f;
             animator.SetTrigger("Attack");

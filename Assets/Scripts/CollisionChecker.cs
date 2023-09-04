@@ -8,7 +8,6 @@ public class CollisionChecker : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision");
         collisionDetected = true;
     }
 }

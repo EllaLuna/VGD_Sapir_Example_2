@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootingChannel: {fileID: 11400000, guid: d17d4678e88942444b1fb8349ecdef1a, type: 2}
+  inputChannel: {fileID: 11400000, guid: 919d6ef18300fdb479c2e5cd88ea05d5, type: 2}
