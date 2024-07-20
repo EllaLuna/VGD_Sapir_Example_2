@@ -13,11 +13,12 @@ public class Arrow : MonoBehaviour
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
-        var beacon = FindObjectOfType<BeaconSO>();
-        shootingChannel = beacon.shootingChannel;
-        shootingChannel.Shoot += ArrowDirection;
+        PlayerController.Shoot += ArrowDirection;
+        //var beacon = FindObjectOfType<BeaconSO>();
+        //shootingChannel = beacon.shootingChannel;
+        //shootingChannel.Shoot += ArrowDirection;
     }
-
+   
     private int ReturnZPosition(string arg)
     {
         return z;
@@ -25,6 +26,7 @@ public class Arrow : MonoBehaviour
 
     public void ArrowDirection(Vector3 direction)
     {
+        PlayerController.Shoot -= ArrowDirection;
         z = direction switch
         {
             _ when direction.y > 0 => 0,
@@ -75,6 +77,6 @@ public class Arrow : MonoBehaviour
 
     private void OnDestroy()
     {
-        shootingChannel.Shoot -= ArrowDirection;
+        PlayerController.Shoot -= ArrowDirection;
     }
 }

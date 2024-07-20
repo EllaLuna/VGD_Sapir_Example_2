@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
     }
     void Update()
     {
-        if (enemiesInMap < numberOfEnemies && spawnEnemies == null 
+        if (enemiesInMap < numberOfEnemies && spawnEnemies == null
             && keepSpawningEnemies)
         {
             spawnEnemies = StartCoroutine(SpawnEnemies());
@@ -31,6 +31,7 @@ public class EnemySpawner : MonoBehaviour
     {
         var boundsMin = new Vector2(tilemap.cellBounds.xMin + 5f, tilemap.cellBounds.yMin + 5f);
         var boundsMax = new Vector2(tilemap.cellBounds.xMax - 5f, tilemap.cellBounds.yMax - 5f);
+        Debug.Log(boundsMin + " " + boundsMax);
         do
         {
             Vector3 spawnPlace = PlaceCollisionChecker(boundsMin, boundsMax);

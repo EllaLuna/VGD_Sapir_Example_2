@@ -21,13 +21,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform frontFirePoint;
     bool canAttack = true;
     Transform chosenFirePoint;
-    [SerializeField] ShootingChannel shootingChannel;
-    InputChannel inputChannel;
-    bool shootingPressed = false;
+
+    //[SerializeField] ShootingChannel shootingChannel;
+    //InputChannel inputChannel;
+    bool shootingPressed = false; 
+    public static event Action<Vector3> Shoot;
 
     void Start()
     {
-        AddListeners();
+        //AddListeners();
         AssignDefaults();
     }
     #region Assigns
@@ -47,36 +49,35 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("Rigidbody is null, please assign it");
         }
     }
-
-    private void AddListeners()
-    {
-        var beacon = FindObjectOfType<BeaconSO>();
-        shootingChannel = beacon.shootingChannel;
-        inputChannel = beacon.inputChannel;
-        inputChannel.MoveEvent += HandleMovement;
-        inputChannel.ShootEvent += HandleShooting;
-        inputChannel.ShootCancelledEvent += HandleShootingCancelled;
-    }
     #endregion
 
-    #region HandleInputEvents
-    private void HandleMovement(Vector2 dir)
-    {
-        delta = dir * speed;
-    }
-    private void HandleShooting()
-    {
-        shootingPressed = true;
-    }
-    private void HandleShootingCancelled()
-    {
-        shootingPressed = false;
-    }
+    #region HandleInputEvents(New Input System)
+    //private void AddListeners()
+    //{
+    //    var beacon = FindObjectOfType<BeaconSO>();
+    //    shootingChannel = beacon.shootingChannel;
+    //    inputChannel = beacon.inputChannel;
+    //    inputChannel.MoveEvent += HandleMovement;
+    //    inputChannel.ShootEvent += HandleShooting;
+    //    inputChannel.ShootCancelledEvent += HandleShootingCancelled;
+    //}
+    //private void HandleMovement(Vector2 dir)
+    //{
+    //    delta = dir * speed;
+    //}
+    //private void HandleShooting()
+    //{
+    //    shootingPressed = true;
+    //}
+    //private void HandleShootingCancelled()
+    //{
+    //    shootingPressed = false;
+    //}
     #endregion
 
     void Update()
     {
-        if (shootingPressed && canAttack)
+        if (Input.GetKeyDown(KeyCode.Space) && canAttack)
         {
             shootingPressed = false;
             canAttack = false;
@@ -91,6 +92,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        delta = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
         if (delta == Vector2.zero)
         {
             rigidbody2d.velocity = Vector2.zero;
@@ -115,7 +118,8 @@ public class PlayerController : MonoBehaviour
     public void HandleShoot()
     {
         Instantiate(projectile, chosenFirePoint.position, Quaternion.identity);
-        shootingChannel.Shoot?.Invoke(direction);
+        Shoot?.Invoke(direction);
+        //shootingChannel.Shoot?.Invoke(direction);
     }
 
     private void FlipSprite()
@@ -136,7 +140,7 @@ public class PlayerController : MonoBehaviour
     private void HandleWalking(float deltaX, float deltaY)
     {
         direction = new Vector2(deltaX, deltaY);
-        rigidbody2d.velocity = direction;
+        rigidbody2d.velocity = direction * speed;
         SetWalkingAnimations(deltaX, deltaY);
     }
 
