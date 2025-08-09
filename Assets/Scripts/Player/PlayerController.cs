@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float defaultSpeed;
     float speed;
     Rigidbody2D rigidbody2d;
-    Vector2 direction = new Vector2(0, 0);
-    Vector2 delta = new Vector2(0, 0);
+    Vector2 direction = new(0, 0);
+    Vector2 delta = new(0, 0);
     [Header("Attack")]
     [SerializeField] GameObject projectile;
     [SerializeField] Transform sideFirePoint;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     //[SerializeField] ShootingChannel shootingChannel;
     //InputChannel inputChannel;
-    bool shootingPressed = false; 
+    //bool shootingPressed = false; 
     public static event Action<Vector3> Shoot;
 
     void Start()
@@ -39,12 +39,12 @@ public class PlayerController : MonoBehaviour
         direction = Vector2.down;
         chosenFirePoint = frontFirePoint;
         animator = GetComponent<Animator>();
-        if (animator is null)
+        if (animator == null)
         {
             Debug.LogError("Animator is null, please assign it");
         }
         rigidbody2d = GetComponent<Rigidbody2D>();
-        if (rigidbody2d is null)
+        if (rigidbody2d == null)
         {
             Debug.LogError("Rigidbody is null, please assign it");
         }
@@ -77,26 +77,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        delta = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         if (Input.GetKeyDown(KeyCode.Space) && canAttack)
         {
-            shootingPressed = false;
+            //shootingPressed = false;
             canAttack = false;
             speed = 0f;
             animator.SetTrigger("Attack");
             StartCoroutine(WaitForAnimation(0.5f));
             if (Mathf.Abs(delta.x) > 0)
                 FlipSprite();
-            Invoke("HandleShoot", 0.2f);
+            Invoke(nameof(HandleShoot), 0.2f);
         }
     }
 
     private void FixedUpdate()
     {
-        delta = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
         if (delta == Vector2.zero)
         {
-            rigidbody2d.velocity = Vector2.zero;
+            rigidbody2d.linearVelocity = Vector2.zero;
             animator.SetBool("Walking", false);
             return;
         }
@@ -117,8 +116,10 @@ public class PlayerController : MonoBehaviour
 
     public void HandleShoot()
     {
-        Instantiate(projectile, chosenFirePoint.position, Quaternion.identity);
+        var arrow = Instantiate(projectile, chosenFirePoint.position, Quaternion.identity);
+       
         Shoot?.Invoke(direction);
+
         //shootingChannel.Shoot?.Invoke(direction);
     }
 
@@ -140,7 +141,7 @@ public class PlayerController : MonoBehaviour
     private void HandleWalking(float deltaX, float deltaY)
     {
         direction = new Vector2(deltaX, deltaY);
-        rigidbody2d.velocity = direction * speed;
+        rigidbody2d.linearVelocity = direction * speed;
         SetWalkingAnimations(deltaX, deltaY);
     }
 

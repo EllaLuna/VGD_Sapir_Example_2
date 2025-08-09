@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        var beacon = FindObjectOfType<BeaconSO>();
+        var beacon = FindFirstObjectByType<BeaconSO>();
         inputChannel = beacon.inputChannel;
         inputChannel.PauseEvent += PauseGame;
 

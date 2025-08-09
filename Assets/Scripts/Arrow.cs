@@ -13,12 +13,14 @@ public class Arrow : MonoBehaviour
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        
         PlayerController.Shoot += ArrowDirection;
+
         //var beacon = FindObjectOfType<BeaconSO>();
         //shootingChannel = beacon.shootingChannel;
         //shootingChannel.Shoot += ArrowDirection;
     }
-   
+
     private int ReturnZPosition(string arg)
     {
         return z;
@@ -70,7 +72,7 @@ public class Arrow : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player"))
         {
-            rigidbody2d.velocity = Vector2.zero;
+            rigidbody2d.linearVelocity = Vector2.zero;
             Destroy(gameObject, 0.3f);
         }
     }
